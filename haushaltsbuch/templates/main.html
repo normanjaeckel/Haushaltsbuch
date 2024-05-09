@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul>
+    <li><a href="{% url 'overview' %}">Überblick</a></li>
+    <li><a href="{% url 'import' %}">Import</a></li>
+    <li><a href="{%url 'admin:index' %}">Admin</a></li>
+</ul>
+{% endblock %}
