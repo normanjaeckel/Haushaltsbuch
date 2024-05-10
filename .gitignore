@@ -4,6 +4,8 @@ db.sqlite3
 static/
 __pycache__/
 
+private/
+
 # Direnv and Devenv
 .direnv
 .devenv*
