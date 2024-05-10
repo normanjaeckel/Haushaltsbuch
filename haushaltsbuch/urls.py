@@ -6,7 +6,7 @@ from .admin import admin_site
 from .views import Import, Main, Overview
 
 urlpatterns = [
-    path("", Main.as_view()),
+    path("", Main.as_view(), name="main"),
     path("overview/", Overview.as_view(), name="overview"),
     path("import/", Import.as_view(), name="import"),
     path("admin/", admin_site.urls),
