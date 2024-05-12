@@ -17,16 +17,17 @@ class Category(models.Model):
 
 class Account(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     weight = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Konto"
         verbose_name_plural = "Konten"
         ordering = ["category", "weight"]
+        unique_together = [["category", "name"]]
 
     def __str__(self):
-        return f"{self.name} ({self.category.name})"
+        return f"{self.category.name}: {self.name}"
 
 
 class Booking(models.Model):
@@ -48,11 +49,15 @@ class Booking(models.Model):
             return f"{self.date} | {self.amount} Euro | {self.account.category.name}: {self.account.name}"
         return f"{self.date} | {self.amount} Euro | Noch nicht gebucht"
 
+    def text(self):
+        return f"{self.banking_text} | {self.payment_party} | {self.reference}"
+
 
 class Reserve(models.Model):
     name = models.CharField(max_length=255, unique=True)
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    weight = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Rücklage"
