@@ -2,6 +2,63 @@
 
 {% block content %}
 
-<p>Überblick</p>
+<table>
+    <tr>
+        <th>Kategorie</th>
+        <th>Gesamt</th>
+        <th>Januar</th>
+        <th>Februar</th>
+        <th>März</th>
+        <th>April</th>
+        <th>Mai</th>
+        <th>Juni</th>
+        <th>Juli</th>
+        <th>August</th>
+        <th>September</th>
+        <th>Oktober</th>
+        <th>November</th>
+        <th>Dezember</th>
+    </tr>
+    <tr id="saldo">
+        <th>Saldo</th>
+        <td>{{ saldo.total|floatformat:"2g" }}</td>
+        <td>{{ saldo.jan|floatformat:"2g" }}</td>
+        <td>{{ saldo.feb|floatformat:"2g" }}</td>
+        <td>{{ saldo.mar|floatformat:"2g" }}</td>
+        <td>{{ saldo.apr|floatformat:"2g" }}</td>
+        <td>{{ saldo.may|floatformat:"2g" }}</td>
+        <td>{{ saldo.jun|floatformat:"2g" }}</td>
+        <td>{{ saldo.jul|floatformat:"2g" }}</td>
+        <td>{{ saldo.aug|floatformat:"2g" }}</td>
+        <td>{{ saldo.sep|floatformat:"2g" }}</td>
+        <td>{{ saldo.oct|floatformat:"2g" }}</td>
+        <td>{{ saldo.nov|floatformat:"2g" }}</td>
+        <td>{{ saldo.dec|floatformat:"2g" }}</td>
+    </tr>
+    {% for account in accounts %}
+    <tr>
+        <th>{{ account.name }}</th>
+        <td>{{ account.total|floatformat:"2g" }}</td>
+        <td>{{ account.jan|floatformat:"2g" }}</td>
+        <td>{{ account.feb|floatformat:"2g" }}</td>
+        <td>{{ account.mar|floatformat:"2g" }}</td>
+        <td>{{ account.apr|floatformat:"2g" }}</td>
+        <td>{{ account.may|floatformat:"2g" }}</td>
+        <td>{{ account.jun|floatformat:"2g" }}</td>
+        <td>{{ account.jul|floatformat:"2g" }}</td>
+        <td>{{ account.aug|floatformat:"2g" }}</td>
+        <td>{{ account.sep|floatformat:"2g" }}</td>
+        <td>{{ account.oct|floatformat:"2g" }}</td>
+        <td>{{ account.nov|floatformat:"2g" }}</td>
+        <td>{{ account.dec|floatformat:"2g" }}</td>
+    </tr>
+    {% endfor %}
+
+
+
+
+</table>
+
+
 
 {% endblock %}

@@ -31,7 +31,13 @@ class Account(models.Model):
 
 
 class Booking(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.PROTECT, null=True)
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="bookings",
+    )
     date = models.DateField()
     payment_party = models.CharField(max_length=255)
     banking_text = models.CharField(max_length=255)
