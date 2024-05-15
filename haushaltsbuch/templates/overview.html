@@ -35,6 +35,24 @@
         <td>{{ saldo.nov|floatformat:"2g" }}</td>
         <td>{{ saldo.dec|floatformat:"2g" }}</td>
     </tr>
+    <tr>
+        <th>Korrekturen</th>
+        <td>{{ correctures.total|floatformat:"2g" }}</td>
+        <td>{{ correctures.jan|floatformat:"2g" }}</td>
+        <td>{{ correctures.feb|floatformat:"2g" }}</td>
+        <td>{{ correctures.mar|floatformat:"2g" }}</td>
+        <td>{{ correctures.apr|floatformat:"2g" }}</td>
+        <td>{{ correctures.may|floatformat:"2g" }}</td>
+        <td>{{ correctures.jun|floatformat:"2g" }}</td>
+        <td>{{ correctures.jul|floatformat:"2g" }}</td>
+        <td>{{ correctures.aug|floatformat:"2g" }}</td>
+        <td>{{ correctures.sep|floatformat:"2g" }}</td>
+        <td>{{ correctures.oct|floatformat:"2g" }}</td>
+        <td>{{ correctures.nov|floatformat:"2g" }}</td>
+        <td>{{ correctures.dec|floatformat:"2g" }}</td>
+
+    </tr>
+
     {% for account in accounts %}
     <tr>
         <th>{{ account.name }}</th>
@@ -54,8 +72,24 @@
     </tr>
     {% endfor %}
 
-
-
+    {% for reserve in reserves %}
+    <tr>
+        <th>{{ reserve.name }}</th>
+        <td>{{ reserve.total|floatformat:"2g" }}</td>
+        <td>{{ reserve.jan|floatformat:"2g" }}</td>
+        <td>{{ reserve.feb|floatformat:"2g" }}</td>
+        <td>{{ reserve.mar|floatformat:"2g" }}</td>
+        <td>{{ reserve.apr|floatformat:"2g" }}</td>
+        <td>{{ reserve.may|floatformat:"2g" }}</td>
+        <td>{{ reserve.jun|floatformat:"2g" }}</td>
+        <td>{{ reserve.jul|floatformat:"2g" }}</td>
+        <td>{{ reserve.aug|floatformat:"2g" }}</td>
+        <td>{{ reserve.sep|floatformat:"2g" }}</td>
+        <td>{{ reserve.oct|floatformat:"2g" }}</td>
+        <td>{{ reserve.nov|floatformat:"2g" }}</td>
+        <td>{{ reserve.dec|floatformat:"2g" }}</td>
+    </tr>
+    {% endfor %}
 
 </table>
 

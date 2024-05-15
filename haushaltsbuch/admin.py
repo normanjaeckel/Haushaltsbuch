@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, Booking, Category, Reserve
+from .models import Account, Booking, Category, Correcture, Reserve
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -18,8 +18,8 @@ class AccountAdmin(admin.ModelAdmin):
 
 
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ["date", "amount", "text", "account"]
-    list_editable = ["account"]
+    list_display = ["date", "amount", "text", "account", "reserve"]
+    list_editable = ["account", "reserve"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None:
@@ -37,4 +37,5 @@ admin_site = AdminSite()
 admin_site.register(Account, AccountAdmin)
 admin_site.register(Booking, BookingAdmin)
 admin_site.register(Category, CategoryAdmin)
+admin_site.register(Correcture)
 admin_site.register(Reserve)

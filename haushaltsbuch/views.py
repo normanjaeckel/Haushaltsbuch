@@ -1,14 +1,15 @@
+import calendar
 import csv
 import datetime
-
 from decimal import Decimal
+
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import models
 from django.urls import reverse_lazy
 from django.views import generic
 
-from django.db import models
-from .models import Booking, Category, Account
+from .models import Account, Booking, Category, Correcture, Reserve
 
 
 class Main(generic.TemplateView):
@@ -18,89 +19,99 @@ class Main(generic.TemplateView):
 class Overview(LoginRequiredMixin, generic.TemplateView):
     template_name = "overview.html"
 
+    month_list = [
+        ("jan", 1),
+        ("feb", 2),
+        ("mar", 3),
+        ("apr", 4),
+        ("may", 5),
+        ("jun", 6),
+        ("jul", 7),
+        ("aug", 8),
+        ("sep", 9),
+        ("oct", 10),
+        ("nov", 11),
+        ("dec", 12),
+    ]
+
     def get_context_data(self, **context):
         year = 2024
+
+        correctures = {
+            "total": Correcture.objects.filter(
+                date__gte=datetime.date(year=year, month=1, day=1),
+                date__lte=datetime.date(year=year, month=12, day=31),
+            ).aggregate(models.Sum("amount", default=0))["amount__sum"],
+        }
+        for month, i in self.month_list:
+            correctures[month] = Correcture.objects.filter(
+                date__gte=datetime.date(year=year, month=i, day=1),
+                date__lte=datetime.date(
+                    year=year, month=i, day=calendar.monthrange(year, i)[1]
+                ),
+            ).aggregate(models.Sum("amount", default=0))["amount__sum"]
+
         accounts = []
         for category in Category.objects.all():
             for account in category.account_set.all():
-                accounts.append(
-                    {
-                        "name": str(account),
-                        "total": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=1, day=1),
-                            date__lte=datetime.date(year=year, month=12, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "jan": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=1, day=1),
-                            date__lte=datetime.date(year=year, month=1, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "feb": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=2, day=1),
-                            date__lte=datetime.date(year=year, month=2, day=29),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "mar": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=3, day=1),
-                            date__lte=datetime.date(year=year, month=3, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "apr": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=4, day=1),
-                            date__lte=datetime.date(year=year, month=4, day=30),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "may": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=5, day=1),
-                            date__lte=datetime.date(year=year, month=5, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "jun": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=6, day=1),
-                            date__lte=datetime.date(year=year, month=6, day=30),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "jul": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=7, day=1),
-                            date__lte=datetime.date(year=year, month=7, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "aug": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=8, day=1),
-                            date__lte=datetime.date(year=year, month=8, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "sep": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=9, day=1),
-                            date__lte=datetime.date(year=year, month=9, day=30),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "oct": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=10, day=1),
-                            date__lte=datetime.date(year=year, month=10, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "nov": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=11, day=1),
-                            date__lte=datetime.date(year=year, month=11, day=30),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                        "dec": account.bookings.filter(
-                            date__gte=datetime.date(year=year, month=12, day=1),
-                            date__lte=datetime.date(year=year, month=12, day=31),
-                        ).aggregate(models.Sum("amount", default=0))["amount__sum"],
-                    }
-                )
+                element = {
+                    "name": str(account),
+                    "total": account.bookings.filter(
+                        date__gte=datetime.date(year=year, month=1, day=1),
+                        date__lte=datetime.date(year=year, month=12, day=31),
+                    ).aggregate(models.Sum("amount", default=0))["amount__sum"],
+                }
+                for month, i in self.month_list:
+                    element[month] = account.bookings.filter(
+                        date__gte=datetime.date(year=year, month=i, day=1),
+                        date__lte=datetime.date(
+                            year=year, month=i, day=calendar.monthrange(year, i)[1]
+                        ),
+                    ).aggregate(models.Sum("amount", default=0))["amount__sum"]
+                accounts.append(element)
 
-        saldo = dict()
-        for key in [
-            "total",
-            "jan",
-            "feb",
-            "mar",
-            "apr",
-            "may",
-            "jun",
-            "jul",
-            "aug",
-            "sep",
-            "oct",
-            "nov",
-            "dec",
-        ]:
-            saldo[key] = sum((account[key] for account in accounts))
+        reserves = []
+        for reserve in Reserve.objects.all():
+            element = {
+                "name": str(reserve),
+                "total": -reserve.bookings.filter(
+                    date__gte=datetime.date(year=year, month=1, day=1),
+                    date__lte=datetime.date(year=year, month=12, day=31),
+                ).aggregate(models.Sum("amount", default=0))["amount__sum"],
+            }
+            for month, i in self.month_list:
+                if Booking.objects.filter(
+                    date__gte=datetime.date(year=year, month=i, day=1)
+                ).exists():
+                    value = reserve.amount
+                    value += reserve.bookings.filter(
+                        date__gte=datetime.date(year=year, month=i, day=1),
+                        date__lte=datetime.date(
+                            year=year, month=12, day=calendar.monthrange(year, i)[1]
+                        ),
+                    ).aggregate(models.Sum("amount", default=0))["amount__sum"]
+                    element["total"] -= reserve.amount
+                else:
+                    value = 0
+                element[month] = value * -1
+            reserves.append(element)
+
+        saldo = {
+            "total": sum((account["total"] for account in accounts))
+            + correctures["total"]
+            + sum((reserve["total"] for reserve in reserves)),
+        }
+        for month, _ in self.month_list:
+            saldo[month] = (
+                sum((account[month] for account in accounts))
+                + correctures[month]
+                + sum((reserve[month] for reserve in reserves))
+            )
 
         context["saldo"] = saldo
+        context["correctures"] = correctures
         context["accounts"] = accounts
+        context["reserves"] = reserves
         return super().get_context_data(**context)
 
 

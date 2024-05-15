@@ -8,9 +8,20 @@ from django.db import migrations
 def get_defaults():
     d = OrderedDict()
     d["Einnahmen"] = ["Gehalt", "Kindergeld", "Sonstiges"]
-    d["Geld"] = ["Bargeld", "Umbuchung Kreditkarte"]
+    d["Geld"] = [
+        "Bargeld",
+        "Umbuchung Kreditkarte",
+        "Kosten des Zahlungsverkehrs",
+        "Durchlaufende Posten",
+    ]
     d["Wohnen und Medien"] = ["Miete", "Strom", "Festnetz, Handy"]
-    d["Täglicher Bedarf"] = ["Lebensmittel", "Kleidung", "Gesundheit", "Sonstiges"]
+    d["Täglicher Bedarf"] = [
+        "Lebensmittel",
+        "Kleidung",
+        "Gesundheit",
+        "KoLa-Leipzig",
+        "Sonstiges",
+    ]
     d["Vorsorge, Versicherung"] = [
         "Riesterrente",
         "Fonds (Oskar.de)",
