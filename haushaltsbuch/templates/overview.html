@@ -3,7 +3,7 @@
 {% block content %}
 
 <table>
-    <tr>
+    <tr class="row-with-bottom-line">
         <th>Kategorie</th>
         <th>Gesamt</th>
         <th>Januar</th>
@@ -19,7 +19,7 @@
         <th>November</th>
         <th>Dezember</th>
     </tr>
-    <tr id="saldo">
+    <tr id="saldo" class="row-with-bottom-line">
         <th>Saldo</th>
         <td>{{ saldo.total|floatformat:"2g" }}</td>
         <td>{{ saldo.jan|floatformat:"2g" }}</td>
@@ -50,11 +50,10 @@
         <td>{{ correctures.oct|floatformat:"2g" }}</td>
         <td>{{ correctures.nov|floatformat:"2g" }}</td>
         <td>{{ correctures.dec|floatformat:"2g" }}</td>
-
     </tr>
 
     {% for account in accounts %}
-    <tr>
+    <tr {% if forloop.last %} class="row-with-bottom-line" {% endif %}>
         <th>{{ account.name }}</th>
         <td>{{ account.total|floatformat:"2g" }}</td>
         <td>{{ account.jan|floatformat:"2g" }}</td>

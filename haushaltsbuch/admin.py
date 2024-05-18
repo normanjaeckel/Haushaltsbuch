@@ -20,6 +20,7 @@ class AccountAdmin(admin.ModelAdmin):
 class BookingAdmin(admin.ModelAdmin):
     list_display = ["date", "amount", "text", "account", "reserve"]
     list_editable = ["account", "reserve"]
+    list_filter = ["date", "account"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None:
